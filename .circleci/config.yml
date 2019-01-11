@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: centos:7.1
+      - image: circleci/centos:7.1
 
         # some containers require setting environment variables
      steps:
