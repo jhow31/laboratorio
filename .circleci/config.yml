@@ -1,77 +1,51 @@
+defaults: &defaults
+  docker:
+    - image: felicianotech/docker-hugo:0.27.1
+  working_directory: ~/project
+
 version: 2
 jobs:
   build:
-    docker:
-      - image: ubuntu:14.04
-       <<: 
-        # some containers require setting environment variables
-     steps:
+    <<: *defaults
+    steps:
       - checkout
-
       - run:
-          command: apt-install install pip
-          command: apt-install install net-tools
-          command: echo 127.0.0.1 devhost | sudo tee -a /etc/hosts
-
-      # Create Postgres users and database
-      # Note the YAML heredoc '|' for nicer formatting
-
+          name: "Build Our Statically Generated Docs Website with Hugo"
+          command: HUGO_ENV=production hugo -v -s src/
+      - persist_to_workspace:
+          root: /root/project
+          paths: src/public/
+  html-testing:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /root/project
       - run:
-          environment:
-            SSH_TARGET: "localhost"
-            TEST_ENV: "linux"
+          name: "Test With HTML Proofer"
+          command: echo "This is where we'd do testing with HTML Proofer."
+  ui-testing:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /root/project
+      - run:
+          name: "Test With Selenium or Behat"
+          command: echo "This is where we'd run a headless browser and test our site's UI."
+  process-testing:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: /root/project
+      - run:
+          name: "Test the commit for org or team processes"
           command: |
-            set -xu
-            mkdir -p ${TEST_REPORTS}
-            run-tests.sh
-            cp out/tests/*.xml ${TEST_REPORTS}
-
-    
-      - store_artifacts:
-          path: /tmp/artifacts
-          destination: build
-
-      # Upload test results
-      - store_test_results:
-          path: /tmp/test-reports
-
-  deploy-stage:
-    docker:
-      - image: ubuntu:14.04
-    working_directory: /tmp/my-project
+            echo "This is where we'd test this commit for things our project wants to enforce"
+            echo " such as code formatting, the signing of a CLA, security requirements, etc."
+  deploy:
+    <<: *defaults
     steps:
+      - attach_workspace:
+          at: /root/project
       - run:
-          name: Deploy if tests pass and branch is Staging
-          command: ansible-playbook site.yml -i staging
-
-  deploy-prod:
-    docker:
-      - image: ubuntu:14.04
-    working_directory: /tmp/my-project
-    steps:
-      - run:
-          name: Deploy if tests pass and branch is Master
-          command: ansible-playbook site.yml -i production
-
-workflows:
-  version: 2
-  build-deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - develop
-                - /feature-.*/
-      - deploy-stage:
-          requires:
-            - build
-          filters:
-            branches:
-              only: staging
-      - deploy-prod:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+          name: "Deploy Our Docs Site"
+          command: echo "This is where we'd deploy using rsync, awscli, etc."
