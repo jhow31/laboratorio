@@ -1,6 +1,6 @@
     working_directory: ./laboratorio
     docker:
-      - image: mysql/mysql-server
+      - image: circleci/mysql-server:5.6
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_ROOT_PASSWORD: ''
