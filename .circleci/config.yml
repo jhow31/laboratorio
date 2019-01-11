@@ -1,4 +1,4 @@
-version: 2
+version: 2.0
     jobs:
      "Jonathan":
        docker:
@@ -8,7 +8,6 @@ version: 2
                 MYSQL_ROOT_PASSWORD: ''
                 MYSQL_DATABASE: circleci
             working_directory: ~/laboratorio
-
           steps:
       - checkout
       - run:
