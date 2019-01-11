@@ -1,7 +1,6 @@
     working_directory: ~/
     docker:
-      - image: circleci/ruby:2.4-node-jessie
-      - image: tkuchiki/delayed-mysql
+      - image: mysql/mysql-server
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_ROOT_PASSWORD: ''
