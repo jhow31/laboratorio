@@ -1,13 +1,14 @@
 version: 2
     jobs:
      "Jonathan":
-       build:
-       working_directory: ~/laboratorio
-      - image: circleci/mysql-server:5.6
-        environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_PASSWORD: ''
-          MYSQL_DATABASE: circleci
+       docker:
+        - image: circleci/mysql-server:5.6
+            environment:
+                MYSQL_ALLOW_EMPTY_PASSWORD: yes
+                MYSQL_ROOT_PASSWORD: ''
+                MYSQL_DATABASE: circleci
+            working_directory: ~/laboratorio
+
           steps:
       - checkout
       - run:
