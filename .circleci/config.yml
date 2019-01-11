@@ -1,16 +1,16 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/centos:7.1
+   machine: 
+      image: circleci/classic:201708-01 
 
         # some containers require setting environment variables
      steps:
       - checkout
 
       - run:
-          command: yum install pip
-          command: yum install net-tools
+          command: apt-install install pip
+          command: apt-install install net-tools
           command: echo 127.0.0.1 devhost | sudo tee -a /etc/hosts
 
       # Create Postgres users and database
