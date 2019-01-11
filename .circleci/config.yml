@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: ubuntu:14.04
-
+       <<: 
         # some containers require setting environment variables
      steps:
       - checkout
