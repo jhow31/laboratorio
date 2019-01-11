@@ -1,8 +1,8 @@
 version: 2
 jobs:
   build:
-   machine: 
-      image: circleci/classic:201708-01 
+    docker:
+      - image: ubuntu:14.04
 
         # some containers require setting environment variables
      steps:
@@ -15,8 +15,6 @@ jobs:
 
       # Create Postgres users and database
       # Note the YAML heredoc '|' for nicer formatting
-      - run: |
-          adduser jonathan
 
       - run:
           environment:
