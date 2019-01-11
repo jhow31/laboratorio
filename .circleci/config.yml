@@ -1,4 +1,4 @@
-    working_directory: ~/
+    working_directory: ./laboratorio
     docker:
       - image: mysql/mysql-server
         environment:
