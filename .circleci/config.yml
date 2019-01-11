@@ -2,37 +2,21 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ubuntu:14.04
-      - image: postgres:9.4.1
+      - image: centos:7.1
+
         # some containers require setting environment variables
-        environment:
-          POSTGRES_USER: root
-
-      - image: redis@sha256:54057dd7e125ca41afe526a877e8bd35ec2cdd33b9217e022ed37bdcf7d09673
-
-      - image: rabbitmq:3.5.4
-
-    environment:
-      TEST_REPORTS: /tmp/test-reports
-
-    working_directory: ~/laboratorio
-
-    steps:
+     steps:
       - checkout
 
       - run:
+          command: yum install pip
+          command: yum install net-tools
           command: echo 127.0.0.1 devhost | sudo tee -a /etc/hosts
 
       # Create Postgres users and database
       # Note the YAML heredoc '|' for nicer formatting
       - run: |
-          sudo -u root createuser -h localhost --superuser ubuntu &&
-          sudo createdb -h localhost test_db
-
-      - restore_cache:
-          keys:
-            - v1-my-project-{{ checksum "project.clj" }}
-            - v1-my-project-
+          adduser jonathan
 
       - run:
           environment:
@@ -44,18 +28,7 @@ jobs:
             run-tests.sh
             cp out/tests/*.xml ${TEST_REPORTS}
 
-      - run: |
-          set -xu
-          mkdir -p /tmp/artifacts
-          create_jars.sh ${CIRCLE_BUILD_NUM}
-          cp *.jar /tmp/artifacts
-
-      - save_cache:
-          key: v1-my-project-{{ checksum "project.clj" }}
-          paths:
-            - ~/.m2
-
-      # Save artifacts
+    
       - store_artifacts:
           path: /tmp/artifacts
           destination: build
