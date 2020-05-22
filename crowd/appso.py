@@ -23,10 +23,13 @@ import smtp
 import DeepL
 import pandas
 import matplotlib.pyplot as plt
+import sys
+import os
 
 if os.environ.get('DISPLAY','') == '':
-    print('no display found. Using non-interactive Agg backend')
-    mpl.use('Agg')
+    print('no display found. Using :0.0')
+    os.environ.__setitem__('DISPLAY', ':0.0')
+
 
 app = Flask(__name__)
 
@@ -272,7 +275,9 @@ def draw():
 
 	plt.savefig('static/images/plot.png')
 
-	return render_template('plot.html', url='/static/images/plot.png')
+	return plt.show()
+
+#	return render_template('plot.html', url='static/images/plot.png')
 
 @app.route('/teste')
 def teste():
