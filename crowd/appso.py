@@ -204,7 +204,7 @@ def chart():
 	print(data)
 	for row in data:
 		chart.add(row[0], [row[1]])
-	return chart.render_tree()
+	return chart.render_data_uri()
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
