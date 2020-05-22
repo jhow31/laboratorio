@@ -39,6 +39,22 @@ app.config['MYSQL_DB'] = 'crowd'
 mysql = MySQL(app)
 
 
+from collections import defaultdict
+
+measurement_1=defaultdict(None,[
+  ("component1", [11.83, 11.35, 0.55]), 
+  ("component2", [2.19, 2.42, 0.96]),
+  ("component3", [1.98, 2.17, 0.17])])
+
+measurement_2=defaultdict(None,[
+  ("component1", [34940.57, 35260.41, 370.45]),
+  ("component2", [1360.67, 1369.58, 2.69]),
+  ("component3", [13355.60, 14790.81, 55.63])])
+
+x_labels=['2016-12-01', '2016-12-02', '2016-12-03']
+
+
+
 
 @app.route('/sell')
 def firsts():
@@ -231,9 +247,6 @@ def chart3():
 #       smtp.email_sender()
         timestamp = datetime.datetime.now()
         time2 = timestamp  - datetime.timedelta(days=30)
-        chart2 = pygal.Line()
-	chart2(1, 2, 3, fill=True)
-	chart2.add('', [3, 2, 1], dot=False)
 	chart = pygal.HorizontalBar()
         cur = mysql.connection.cursor()
         cur.execute("select produto, quantidade from produtos;")
@@ -248,6 +261,22 @@ def chart3():
 			DeepL.deepln(a,b,c)
         return chart.render_response()
 
+
+@app.route("/simple_chart4")
+def draw(measurement_1, measurement_2 ,x_labels):
+	graph = pygal.Line()
+	graph.x_labels = x_labels
+
+	for key, value in measurement_1.iteritems():
+     ##
+		if "component1":
+			graph.add(key, value, stroke_style={'width': 5, 'dasharray': '3, 6', 'linecap': 'round', 'linejoin': 'round'})
+		else:
+     ##
+			graph.add(key, value)
+	for key, value in measurement_2.iteritems():
+		graph.add(key, value, secondary=True)
+	return graph.render_data_uri()
 
 
 @app.route('/teste')
