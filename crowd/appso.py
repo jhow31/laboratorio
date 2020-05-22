@@ -22,15 +22,16 @@ import smtplib
 import smtp
 import DeepL
 import pandas
-import matplotlib.pyplot as plt
 import sys
 import os
-import matplotlib as mpl
+import networkx as nx
+import matplotlib
+import matplotlib.pyplot
+import matplotlib.pyplot as plt
 
 
-if os.environ.get('DISPLAY','') == '':
-    print('no display found. Using non-interactive Agg backend')
-    mpl.use('Agg')
+plt.switch_backend('agg')
+
 
 app = Flask(__name__)
 
