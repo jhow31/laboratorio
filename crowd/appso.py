@@ -23,6 +23,7 @@ import smtp
 import DeepL
 import pandas
 import matplotlib.pyplot as plt
+import tkinter
 
 
 app = Flask(__name__)
