@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 import base64
 import os
@@ -264,32 +265,30 @@ def chart3():
 
 @app.route("/simple_chart4")
 def draw():
-	measurement_1=defaultdict(None,[
-		("component1", [11.83, 11.35, 0.55]),
-		("component2", [2.19, 2.42, 0.96]),
-		("component3", [1.98, 2.17, 0.17])])
+	list2=["A","B","C","D"]
+	liste_A=[10,20,30,40]
+	liste_B=[100,10,50,20]
 
-	measurement_2=defaultdict(None,[
-		("component1", [34940.57, 35260.41, 370.45]),
-		("component2", [1360.67, 1369.58, 2.69]),
-		("component3", [13355.60, 14790.81, 55.63])])
+	html_file=open("merged.html",'w')
+	html_file.write("<html><head>…</head><body>")
 
-	x_labels=['2016-12-01', '2016-12-02', '2016-12-03']
+	success_plot =pygal.Line(height=400,include_x_axis=True,label_font_size=4,title_font_size=26,x_title='semaines',y_title='taux_debit',legend_at_bottom=True,x_label_rotation=90)
+	success_plot.title = ('Title1')
+	success_plot.x_labels = list2
+	success_plot.add('PLOT 1', liste_A)
+	success_plot.add('PLOT 2', liste_B)
+	success_plot.render_to_file('graph1.svg') 
+	html_file.write("      <object type=\"image/svg+xml\" data=\"graph1.svg\"></object>"+"\n")
 
-	graph = pygal.Line()
-	graph.x_labels = x_labels
+	success_plot.title = ('Title2')
+	success_plot.x_labels = list2
+	success_plot.add('PLOT 2', liste_A)
+	success_plot.add('PLOT 3', liste_B)
+	success_plot.render_to_file('graph2.svg') 
+	html_file.write("      <object type=\"image/svg+xml\" data=\"graph2.svg\"></object>"+"\n")
 
-	for key, value in measurement_1.iteritems():
-     ##
-		if "component1":
-			graph.add(key, value, stroke_style={'width': 5, 'dasharray': '3, 6', 'linecap': 'round', 'linejoin': 'round'})
-		else:
-     ##
-			graph.add(key, value)
-	for key, value in measurement_2.iteritems():
-		graph.add(key, value, secondary=True)
-	return graph.render_response()
 
+	return html_file.write("</body></html>")  
 
 @app.route('/teste')
 def teste():
