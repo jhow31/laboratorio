@@ -217,7 +217,9 @@ def chart():
 	print(data)
 	for row in data:
 		chart.add(row[0], [row[1]])
-	return chart.render_data_uri()
+	teste = chart.render_response()
+        graph_data = chart.render_data_uri()
+        return render_template("graphing.html", graph_data = teste)
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
@@ -255,20 +257,23 @@ def chart3():
                 if x["TimeStamp"] < time2:
                         print(x["Produto"],x["Categoria"],x["Valor"],x["Quantidade"])
 #                        chart.add(x["Produto"], x["Quantidade"])
-			DeepL.deepln(a,b,c)
         return chart.render_response()
 
 
 @app.route("/simple_chart4")
 def draw():
-	bar_chart = pygal.Bar(height=200)
-	bar_chart.title = 'Browser usage evolution (in %)'
-	bar_chart.x_labels = map(str, range(2002, 2013))
-	bar_chart.add('Firefox', [None, None,    0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-	bar_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
-	bar_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
-	bar_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
-	display(HTML(base_html.format(rendered_chart=bar_chart.render(is_unicode=True))))
+	try:
+		graph = pygal.Line()
+		graph.title = '% Change Coolness of programming languages over time.'
+		graph.x_labels = ['2011','2012','2013','2014','2015','2016']
+		graph.add('Python',  [15, 31, 89, 200, 356, 900])
+		graph.add('Java',    [15, 45, 76, 80,  91,  95])
+		graph.add('C++',     [5,  51, 54, 102, 150, 201])
+		graph.add('All others combined!',  [5, 15, 21, 55, 92, 105])
+		graph_data = graph.render_data_uri()
+		return render_template("graphing.html", graph_data = graph_data)
+	except Exception, e:
+		return(str(e))
 
 #	return render_template('plot.html', url='static/images/plot.png')
 
