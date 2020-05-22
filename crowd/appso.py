@@ -272,9 +272,9 @@ def draw():
 
 	plt.savefig('static/images/plot.png')
 
-	return plt.show()
+#	return plt.show()
 
-#	return render_template('plot.html', url='static/images/plot.png')
+	return render_template('plot.html', url='static/images/plot.png')
 
 @app.route('/teste')
 def teste():
