@@ -219,7 +219,7 @@ def chart():
 		chart.add(row[0], [row[1]])
 	teste = chart.render_response()
         graph_data = chart.render_data_uri()
-        return render_template("graphing.html", graph_data = teste)
+        return render_template("graphing.html", chart = graph_data, chart2 = graph_data)
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
