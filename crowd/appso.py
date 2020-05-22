@@ -270,7 +270,7 @@ def draw():
 	liste_B=[100,10,50,20]
 
 	html_file=open("merged.html",'w')
-	html_file.write("<html><head>…</head><body>")
+	html_file.write("<html><head>…</head><body>"+"\n")
 
 	success_plot =pygal.Line(height=400,include_x_axis=True,label_font_size=4,title_font_size=26,x_title='semaines',y_title='taux_debit',legend_at_bottom=True,x_label_rotation=90)
 	success_plot.title = ('Title1')
@@ -288,7 +288,7 @@ def draw():
 	html_file.write("      <object type=\"image/svg+xml\" data=\"graph2.svg\"></object>"+"\n")
 
 
-	return html_file.write("</body></html>")  
+	html_file.write("</body></html>")  
 
 @app.route('/teste')
 def teste():
