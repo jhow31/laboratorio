@@ -7,3 +7,5 @@ pygal
 flask_mysqldb
 simplejson
 pymongo
+pandas
+matplotlib
