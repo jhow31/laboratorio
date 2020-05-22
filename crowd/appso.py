@@ -25,8 +25,12 @@ import pandas
 import matplotlib.pyplot as plt
 import sys
 import os
+import matplotlib as mpl
 
 
+if os.environ.get('DISPLAY','') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
 
 app = Flask(__name__)
 
