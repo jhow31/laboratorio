@@ -1,0 +1,42 @@
+Create database crowd;
+GRANT ALL ON *.* TO root@'%' IDENTIFIED BY 'root';
+select sum( valor*%s ) total from estoque where categoria =%s and produto =%s;
+
+create table estoque(
+   id_estoque INT NOT NULL AUTO_INCREMENT,
+   valor INT(250),
+   quantidade INT(250),
+   categoria VARCHAR(100) NOT NULL,
+   produto VARCHAR(40) NOT NULL,
+   date_now datetime NOT NULL,
+   PRIMARY KEY (id_estoque)
+);
+
+
+create table venda(
+   id_venda INT NOT NULL AUTO_INCREMENT,
+   valor INT(250),
+   quantidade INT(250),
+   categoria VARCHAR(100) NOT NULL,
+   produto VARCHAR(40) NOT NULL,
+   date_now datetime NOT NULL,  
+   PRIMARY KEY (id_venda)
+);
+
+(produto, descricao, categoria, quantidade, valor, people_id, contato )
+
+create table produtos(
+   id_produto INT NOT NULL AUTO_INCREMENT,
+   produto VARCHAR(250),
+   valor INT(250),
+   descricao VARCHAR(100),
+   quantidade INT(250),
+   categoria VARCHAR(100) NOT NULL,
+   PRIMARY KEY (id_produto)
+);
+
+
+cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt_id, cate, valor, quantidad, timestamp))
+
+
+

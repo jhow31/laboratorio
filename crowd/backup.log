@@ -1,0 +1,35 @@
+TIME: 1 - -------------------------------------------------------------
+TIME: 1 - Fri May 15 19:55:02 -03 2020 - osync 1.2 script begin.
+TIME: 1 - -------------------------------------------------------------
+TIME: 1 - Sync task [quicksync_task] launched as root@localhost.localdomain (PID 10965)
+ [|]  TIME: 1 - Checking minimum disk space in local replica [/root/crowd/].
+TIME: 1 - Checking minimum disk space in local replica [/root/files/crowd/].
+ [/]   [-]   [\]  TIME: 1 - Starting synchronization task.
+ [|]  TIME: 1 - Creating initiator replica file list [/root/crowd/].
+TIME: 1 - Creating target replica file list [/root/files/crowd/].
+ [/]   [-]  TIME: 1 - Creating initiator replica deleted file list.
+TIME: 1 - Creating target replica deleted file list.
+ [\]   [|]  TIME: 1 - Updating target replica.
+TIME: 1 - Updating target replica succeded.
+ [/]   [-]  TIME: 1 - Updating initiator replica.
+TIME: 1 - Updating initiator replica succeded.
+ [\]   [|]  TIME: 1 - Propagating deletions to initiator replica.
+TIME: 1 - Propagating deletions to target replica.
+ [/]   [-]  TIME: 2 - Creating initiator replica file list [/root/crowd/].
+TIME: 2 - Creating target replica file list [/root/files/crowd/].
+ [\]  TIME: 2 - Finished synchronization task.
+TIME: 2 - Running conflict backup cleanup.
+ [|]  TIME: 2 - Removing files older than 30 days on initiator replica for conflict backup deletion.
+TIME: 2 - Removing files older than 30 days on target replica for conflict backup deletion.
+TIME: 2 - File cleanup complete on initiator replica.
+TIME: 2 - File cleanup complete on target replica.
+TIME: 2 - Directory cleanup complete on initiator replica.
+TIME: 2 - Directory cleanup complete on target replica.
+ [/]  TIME: 2 - Running soft deletion cleanup.
+ [-]  TIME: 2 - Removing files older than 30 days on initiator replica for softdelete deletion.
+TIME: 2 - Removing files older than 30 days on target replica for softdelete deletion.
+TIME: 2 - File cleanup complete on initiator replica.
+TIME: 2 - File cleanup complete on target replica.
+TIME: 2 - Directory cleanup complete on initiator replica.
+TIME: 2 - Directory cleanup complete on target replica.
+ [\]   [|]   [/]  TIME: 2 - osync finished.
