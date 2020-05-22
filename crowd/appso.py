@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask
+from flask import Flask, make_response
 import base64
 import os
 import pygal
@@ -267,7 +268,6 @@ def draw():
     from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
     from matplotlib.figure import Figure
     from matplotlib.dates import DateFormatter
-    import make_response 
     fig=Figure()
     ax=fig.add_subplot(111)
     x=[]
