@@ -194,6 +194,9 @@ def consulting():
 
 @app.route("/simple_chart")
 def chart():
+        chart2 = pygal.Line()
+        chart2(1, 2, 3, fill=True)
+        chart2.add('', [3, 2, 1], dot=False)
 	chart = pygal.HorizontalBar()
 	cur = mysql.connection.cursor()
 	cur.execute("select produto, quantidade from produtos;")
@@ -227,13 +230,16 @@ def chart3():
 #       smtp.email_sender()
         timestamp = datetime.datetime.now()
         time2 = timestamp  - datetime.timedelta(days=30)
-        chart = pygal.HorizontalBar()
+        chart2 = pygal.Line()
+	chart2(1, 2, 3, fill=True)
+	chart2.add('', [3, 2, 1], dot=False)
+	chart = pygal.HorizontalBar()
         cur = mysql.connection.cursor()
         cur.execute("select produto, quantidade from produtos;")
         data2 = cur.fetchall()
         documents = list(mbvenda.find())
         x = []
-	print(documents["Quantidade"])
+#	print(documents["Quantidade"])
         for x in documents:
                 if x["TimeStamp"] < time2:
                         print(x["Produto"],x["Categoria"],x["Valor"],x["Quantidade"])
