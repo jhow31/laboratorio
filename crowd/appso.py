@@ -207,19 +207,14 @@ def consulting():
 
 @app.route("/simple_chart")
 def chart():
-        chart2 = pygal.Line()
-        chart2(1, 2, 3, fill=True)
-        chart2.add('', [3, 2, 1], dot=False)
-	chart = pygal.HorizontalBar()
 	cur = mysql.connection.cursor()
 	cur.execute("select produto, quantidade from produtos;")
 	data = cur.fetchall()
-	print(data)
 	for row in data:
+	        chart = pygal.HorizontalBar()
 		chart.add(row[0], [row[1]])
-	teste = chart.render_response()
-        graph_data = chart.render_data_uri()
-        return render_template("graphing.html", chart = graph_data, chart2 = graph_data)
+        graph_produto = chart.render_data_uri()
+        return render_template("graphing.html", chart = graph_produto, chart2 = graph_produto)
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
