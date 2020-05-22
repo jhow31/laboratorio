@@ -1,8 +1,32 @@
 <!-- Don't forget the "|safe"! -->
-<div id="chart">
-   <embed type="image/svg+xml" src= {{ chart|safe }} width="900" height="1000"/>
-</div>
-<div id="chart2">
-   <embed type="image/svg+xml" src= {{ chart|safe }} />
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+}
 
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+</head>
+<body>
+<div id="chart" class="column">
+   <embed type="image/svg+xml" src= {{ chart|safe }} width="700" height="800"/>
+</div>
+<div id="chart2" class="column">
+   <embed type="image/svg+xml" src= {{ chart|safe }} width="700" height="800"/>
+</div>
+</body>
+</html>
