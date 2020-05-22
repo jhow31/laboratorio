@@ -253,30 +253,9 @@ def chart3():
 
 @app.route("/simple_chart4")
 def draw():
-	list2=["A","B","C","D"]
-	liste_A=[10,20,30,40]
-	liste_B=[100,10,50,20]
-
-	html_file=open("merged.html",'w')
-	html_file.write("<html><head>…</head><body>"+"\n")
-
-	success_plot =pygal.Line(height=400,include_x_axis=True,label_font_size=4,title_font_size=26,x_title='semaines',y_title='taux_debit',legend_at_bottom=True,x_label_rotation=90)
-	success_plot.title = ('Title1')
-	success_plot.x_labels = list2
-	success_plot.add('PLOT 1', liste_A)
-	success_plot.add('PLOT 2', liste_B)
-	success_plot.render_to_file('graph1.svg') 
-	html_file.write("      <object type=\"image/svg+xml\" data=\"graph1.svg\"></object>"+"\n")
-
-	success_plot.title = ('Title2')
-	success_plot.x_labels = list2
-	success_plot.add('PLOT 2', liste_A)
-	success_plot.add('PLOT 3', liste_B)
-	success_plot.render_to_file('graph2.svg') 
-	html_file.write("      <object type=\"image/svg+xml\" data=\"graph2.svg\"></object>"+"\n")
-
-
-	html_file.write("</body></html>")  
+ 	lnprice=np.log(price)
+ 	plt.plot(lnprice)
+ 	return render_template('untitled1.html', name = plt.show())
 
 @app.route('/teste')
 def teste():
