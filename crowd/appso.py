@@ -213,7 +213,8 @@ def chart():
 	for row in data:
 	        chart = pygal.HorizontalBar()
 		chart.add(row[0], [row[1]])
-        graph_produto = chart.render_data_uri()
+ 		print(data)
+	graph_produto = chart.render_dat_uri()
         return render_template("graphing.html", chart = graph_produto, chart2 = graph_produto)
 #	return chart.render_response()
 
@@ -231,7 +232,7 @@ def chart2():
 #	print(documents.append("Produtos"))
 	x = []
 	for x in documents:
-		if x["TimeStamp"] < time2:
+		if x["TimeStamp"] > time2:
 		#	print(x["Produto"],x["Categoria"],x["Valor"],x["Quantidade"])
 			chart.add(x["Produto"], x["Quantidade"])
         return chart.render_response()
