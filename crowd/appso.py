@@ -261,32 +261,14 @@ def chart3():
 
 @app.route("/simple_chart4")
 def draw():
-    import datetime
-    import StringIO
-    import random
-
-    from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-    from matplotlib.figure import Figure
-    from matplotlib.dates import DateFormatter
-    fig=Figure()
-    ax=fig.add_subplot(111)
-    x=[]
-    y=[]
-    now=datetime.datetime.now()
-    delta=datetime.timedelta(days=1)
-    for i in range(10):
-        x.append(now)
-        now+=delta
-        y.append(random.randint(0, 1000))
-    ax.plot_date(x, y, '-')
-    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
-    fig.autofmt_xdate()
-    canvas=FigureCanvas(fig)
-    png_output = StringIO.StringIO()
-    canvas.print_png(png_output)
-    response=make_response(png_output.getvalue())
-    response.headers['Content-Type'] = 'image/png'
-    return response
+	bar_chart = pygal.Bar(height=200)
+	bar_chart.title = 'Browser usage evolution (in %)'
+	bar_chart.x_labels = map(str, range(2002, 2013))
+	bar_chart.add('Firefox', [None, None,    0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
+	bar_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
+	bar_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
+	bar_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
+	display(HTML(base_html.format(rendered_chart=bar_chart.render(is_unicode=True))))
 
 #	return render_template('plot.html', url='static/images/plot.png')
 
