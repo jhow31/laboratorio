@@ -224,8 +224,8 @@ def chart():
                 graph_vendas = chart.render_data_uri()
 	cur.execute("select sum(valor) from venda;")
 	valor_total = cur.fetchall()
-	print(valor_total)
-        return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas)
+	print(valor_total[0])
+        return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, value = valor_total[0])
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
