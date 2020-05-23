@@ -150,7 +150,6 @@ def cad():
 	#cur.execute("SELECT id FROM peoples WHERE id = %s ;", [id_people])
 	#id_data  = cur.fetchone();
 	cur.execute("SELECT * FROM produtos WHERE produto = %s;", [produt])
-	valor = valor/100*5+valor
 	data = cur.fetchone()
 	if data is None:
 		cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor, quantidad))         
@@ -171,7 +170,7 @@ def cad():
                         calc = (int(data))
                 print(calc)
 		cur.execute("update produtos  set quantidade = %s where produto = %s;", [calc, produt])
-                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt_id, cate, valor, quantidad, timestamp))
+                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
                 mysql.connection.commit()
 		return render_template('cadastroProdutos.html', value="ID do usuario ja cadastrado com este Vendedor ou ID nao existe")
 
