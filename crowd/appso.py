@@ -86,13 +86,13 @@ def sell():
 		valor_venda = cur.fetchone()
 		for data in valor_venda:
 			valor_venda = (int(data))
-                cur.execute("select id_produto from produtos where produto=%s;", [produt])
-                produt_id = cur.fetchone()		
+                cur.execute("select produto from produtos where produto=%s;", [produt])
+                produt = cur.fetchone()		
 		cur.execute("select categoria from produtos where produto=%s;", [produt])
 		cate = cur.fetchone()
-		data_json={'Processo': "Saida Venda", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor_venda, 'TimeStamp' : timestamp}
+		data_json={'Processo': "Saida Venda", 'Produto' : produt,'ID de Produto' : produt,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor_venda, 'TimeStamp' : timestamp}
                 mbvenda.insert_one(data_json)
-		cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt_id, cate, valor_venda, quantidad, timestamp))
+		cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor_venda, quantidad, timestamp))
 		mysql.connection.commit()
 		return render_template('venda.html', venda = valor_venda, value = produtos)
 	else:
