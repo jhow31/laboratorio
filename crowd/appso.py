@@ -168,7 +168,7 @@ def cad():
 	else:
                 cur.execute("select id_produto from produtos where produto=%s;", [produt])
 		produt_id = cur.fetchone()
-		data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor, 'TimeStamp' : timestamp}
+		data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': str(valor), 'TimeStamp' : timestamp}
 		mbestoque.insert_one(data_json)
                 cur.execute("select sum( %s+quantidade ) total from produtos where produto =%s;", [quantidad,produt])
                 data_calc = cur.fetchone()
