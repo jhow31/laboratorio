@@ -156,13 +156,13 @@ def cad():
 	if data is None:
 
                 cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
-                cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor, quantidad))
+                cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor_venda, quantidad))
                 mysql.connection.commit()
                 valor_percentual = ("select valor from estoque where produto = %s;", [produt])
 		mysql.connection.commit()
 		cur.execute("select id_produto from produtos where produto=%s;", [produt])
 		produt_id = cur.fetchone()
- 		data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor, 'TimeStamp' : timestamp}
+ 		data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': str(valor), 'TimeStamp' : timestamp}
 		mbestoque.insert_one(data_json)
 		return render_template('cadastroProdutos.html', value="Cadastrado")
 	else:
