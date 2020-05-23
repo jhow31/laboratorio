@@ -152,7 +152,11 @@ def cad():
 	cur.execute("SELECT * FROM produtos WHERE produto = %s;", [produt])
 	data = cur.fetchone()
 	if data is None:
-		cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor, quantidad))         
+
+                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
+                cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor/100*5+valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor, quantidad))
+                mysql.connection.commit()
+                valor_percentual = ("select valor from estoque where produto = %s;", [produt])
 		mysql.connection.commit()
 		cur.execute("select id_produto from produtos where produto=%s;", [produt])
 		produt_id = cur.fetchone()
