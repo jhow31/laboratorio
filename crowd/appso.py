@@ -205,7 +205,7 @@ def consulting():
 	data = cur.fetchone()
 	return render_template('teste.html', value=data)
 
-@app.route("/simple_chart")
+@app.route("/wallet")
 def chart():
         chart = pygal.Bar()
 	cur = mysql.connection.cursor()
