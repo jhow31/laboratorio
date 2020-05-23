@@ -222,7 +222,9 @@ def chart():
                 chart.add(row[0], [row[1]])
                 print(data3)
                 graph_vendas = chart.render_data_uri()
-
+	cur.execute("select sum(valor) from venda;")
+	valor_total = cur.fetchall()
+	print(valor_total)
         return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas)
 #	return chart.render_response()
 
