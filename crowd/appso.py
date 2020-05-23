@@ -214,14 +214,20 @@ def chart():
 	for row in data:
 		chart.add(row[0], [row[1]])
  		print(data)
-		graph_produto = chart.render_data_uri()
+		graph_produtos = chart.render_data_uri()
         cur.execute("select produto, quantidade from estoque;")
         data = cur.fetchall()
         for row in data:
                 chart.add(row[0], [row[1]])
                 print(data)
-                graph_produto2 = chart.render_data_uri()
-        return render_template("graphing.html", chart = graph_produto2, chart2 = graph_produto)
+                graph_estoque = chart.render_data_uri()
+        cur.execute("select produto, valor from venda;")
+        data = cur.fetchall()
+        for row in data:
+                chart.add(row[0], [row[1]])
+                print(data)
+                graph_vendas = chart.render_data_uri()
+        return render_template("graphing.html", chart = graph_produtos, chart2 = graph_estoque, chart3 = graph_vendas)
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
