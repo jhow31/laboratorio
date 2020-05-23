@@ -80,7 +80,7 @@ def sell():
 	if quantidad <= calc_result:
 		cur.execute("select sum( quantidade-%s ) from produtos where produto =%s;", [quantidad,produt])
 		calc = cur.fetchone()
-		cur.execute("update produtos set quantidade = quantidade-%s where produto = %s;", [quantidad, produt])
+		cur.execute("update produtos set quantidade = quantidade-%s where produto = %s;", [quantida, produt])
 		mysql.connection.commit()
 		cur.execute("select sum( valor*%s ) from produtos where produto =%s;", [quantidad,produt])
 		valor_venda = cur.fetchone()
