@@ -9,7 +9,7 @@
 
 .column {
   float: left;
-  width: 30%;
+  width: 33.33%;
   padding: 5px;
 }
 
@@ -23,13 +23,13 @@
 </head>
 <body>
 <div id="chart" class="column">
-   <embed type="image/svg+xml" src= {{ chart|safe }} width="700" height="800"/>
+   <embed type="image/svg+xml" src= {{ chart|safe }} />
 </div>
 <div id="chart2" class="column">
-   <embed type="image/svg+xml" src= {{ chart2|safe }} width="700" height="800"/>
+   <embed type="image/svg+xml" src= {{ chart2|safe }} />
 </div>
 <div id="chart3" class="column">
-   <embed type="image/svg+xml" src= {{ chart3|safe }} width="700" height="800"/>
+   <embed type="image/svg+xml" src= {{ chart3|safe }} />
 </div>
 </body>
 </html>
