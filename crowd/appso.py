@@ -207,7 +207,7 @@ def consulting():
 
 @app.route("/simple_chart")
 def chart():
-        chart = pygal.HorizontalBar()
+        chart = pygal.Bar()
 	cur = mysql.connection.cursor()
 	cur.execute("select produto, quantidade from produtos;")
 	data = cur.fetchall()
@@ -215,7 +215,7 @@ def chart():
 		chart.add(row[0], [row[1]])
  		print(data)
 		graph_produtos = chart.render_data_uri()
-        chart = pygal.HorizontalBar()
+        chart = pygal.Bar()
         cur.execute("select produto, quantidade from estoque;")
         data2 = cur.fetchall()
         for row in data2:
@@ -223,7 +223,7 @@ def chart():
                 print(data2)
                 graph_estoque = chart.render_data_uri()
         cur.execute("select produto, valor from venda;")
-        chart = pygal.HorizontalBar()
+        chart = pygal.Bar()
         data3 = cur.fetchall()
         for row in data3:
                 chart.add(row[0], [row[1]])
