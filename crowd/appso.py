@@ -143,7 +143,7 @@ def cad():
 	cate = str(request.form['produto_cat'])
 	desc = str(request.form['produto_desc'])
 	quantidad = int(request.form['produto_quant'])
-	valor = Decimal(request.form['produto_val'])
+	valor = double(request.form['produto_val'])
 	id_people  = float(request.form['produto_id_vendor'])
 #	contact = float(request.form['produto_cont'])
 	cur = mysql.connection.cursor()
