@@ -150,6 +150,7 @@ def cad():
 	#cur.execute("SELECT id FROM peoples WHERE id = %s ;", [id_people])
 	#id_data  = cur.fetchone();
 	cur.execute("SELECT * FROM produtos WHERE produto = %s;", [produt])
+	valor = valor/100*5+valor
 	data = cur.fetchone()
 	if data is None:
 		cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor, quantidad))         
