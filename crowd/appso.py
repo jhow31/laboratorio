@@ -92,7 +92,8 @@ def sell():
 		cate = cur.fetchone()
 		data_json={'Processo': "Saida Venda", 'Produto' : produt,'ID de Produto' : produt,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor_venda, 'TimeStamp' : timestamp}
                 mbvenda.insert_one(data_json)
-		cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor_venda, quantidad, timestamp))
+		cur.execute("update venda set quantidade = quantidade+%s where produto = %s;",(quantidad, produt))
+#		cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor_venda, quantidad, timestamp))
 		mysql.connection.commit()
 		return render_template('venda.html', venda = valor_venda, value = produtos)
 	else:
