@@ -143,7 +143,7 @@ def cad():
 	cate = str(request.form['produto_cat'])
 	desc = str(request.form['produto_desc'])
 	quantidad = int(request.form['produto_quant'])
-	valor = str(request.form['produto_val'])
+	valor = Decimal(request.form['produto_val'])
 	id_people  = float(request.form['produto_id_vendor'])
 #	contact = float(request.form['produto_cont'])
 	cur = mysql.connection.cursor()
@@ -151,10 +151,12 @@ def cad():
 	#id_data  = cur.fetchone();
 	cur.execute("SELECT * FROM produtos WHERE produto = %s;", [produt])
 	data = cur.fetchone()
+	valor_venda = valor/100*5+valor
+	print(valor_venda)
 	if data is None:
 
                 cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
-                cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor/100*5+valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor, quantidad))
+                cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor, quantidad))
                 mysql.connection.commit()
                 valor_percentual = ("select valor from estoque where produto = %s;", [produt])
 		mysql.connection.commit()
