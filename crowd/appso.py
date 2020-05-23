@@ -221,7 +221,7 @@ def chart():
                 chart.add(row[0], [row[1]])
                 print(data)
                 graph_produto2 = chart.render_data_uri()
-        return render_template("graphing.html", chart = graph_produto, chart2 = graph_produto2)
+        return render_template("graphing.html", chart = graph_produto2, chart2 = graph_produto)
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
