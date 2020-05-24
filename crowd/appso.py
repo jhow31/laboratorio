@@ -235,7 +235,7 @@ def chart():
 #	print(valor_total[0])
 	cur.execute("select produto, valor*quantidade from produtos;")
 	valor_estoque = json.dumps(cur.fetchall())
-	cur.execute("select sum(valor) from produtos;")
+	cur.execute("select sum(valor*quantidade) from produtos;")
 	valor_t_estoque = cur.fetchall()
 	print(json.loads(valor_estoque))
         return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, valor_total = valor_total[0], valor_estoque = valor_estoque, valor_t_estoque = valor_t_estoque[0])
