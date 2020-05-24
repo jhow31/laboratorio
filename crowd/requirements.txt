@@ -8,4 +8,5 @@ flask_mysqldb
 simplejson
 pymongo
 pandas
+numpy
 matplotlib
