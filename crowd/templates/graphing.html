@@ -24,11 +24,11 @@
 <body>
 <div id="chart" class="column">
    <embed type="image/svg+xml" src= {{ chart|safe }} />
-<div class="title">Estoque</div>
+<div class="title">Estoque {{valor_estoque}}</div>
 </div>
 <div id="chart3" class="column">
    <embed type="image/svg+xml" src= {{ chart3|safe }} />
-   <div class="title">Valor Vendido Total: {{value}}</div>
+   <div class="title">Valor Vendido Total: {{valor_total}}</div>
 </div>
 </body>
 </html>
