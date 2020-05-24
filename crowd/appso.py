@@ -221,14 +221,14 @@ def chart():
 	data = cur.fetchall()
 	for row in data:
 		chart.add(row[0], [row[1]])
- 		print(data)
+# 		print(data)
 		graph_produtos = chart.render_data_uri()
         cur.execute("select produto, valor from venda;")
         chart = pygal.Bar()
         data3 = cur.fetchall()
         for row in data3:
                 chart.add(row[0], [row[1]])
-                print(data3)
+#                print(data3)
                 graph_vendas = chart.render_data_uri()
 	cur.execute("select sum(valor) from venda;")
 	valor_total = cur.fetchall()
