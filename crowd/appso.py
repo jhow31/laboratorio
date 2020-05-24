@@ -223,7 +223,7 @@ def chart():
 		chart.add(row[0], [row[1]])
 # 		print(data)
 		graph_produtos = chart.render_data_uri()
-        cur.execute("select produto, valor from venda where produto = produto;")
+        cur.execute("select produto, valor as teste from venda group by produto;")
         chart = pygal.Bar()
         data3 = cur.fetchall()
         for row in data3:
