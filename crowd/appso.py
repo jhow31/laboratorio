@@ -232,7 +232,10 @@ def chart():
                 graph_vendas = chart.render_data_uri()
 	cur.execute("select sum(valor) from venda;")
 	valor_total = cur.fetchall()
-	print(valor_total[0])
+#	print(valor_total[0])
+	cur.execute("select produto, valor*quantidade from produtos;")
+	valor_estoque = cur.fetchall()
+	print(valor_estoque)
         return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, value = valor_total[0])
 #	return chart.render_response()
 
