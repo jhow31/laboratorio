@@ -7,7 +7,6 @@ create table estoque(
    quantidade INT(250),
    categoria VARCHAR(100) NOT NULL,
    produto VARCHAR(40) NOT NULL,
-   date_now datetime NOT NULL,
    user_is INT(250),
    PRIMARY KEY (id_estoque)
 );
@@ -19,7 +18,6 @@ create table venda(
    quantidade INT(250),
    categoria VARCHAR(100) NOT NULL,
    produto VARCHAR(40) NOT NULL,
-   date_now datetime NOT NULL,  
    id_user int(250),
    PRIMARY KEY (id_venda)
 );
