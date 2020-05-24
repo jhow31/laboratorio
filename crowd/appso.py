@@ -156,7 +156,7 @@ def cad():
 	print(valor_venda)
 	if data is None:
 
-                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
+                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade) VALUES (%s, %s, %s, %s)", (produt, cate, valor, quantidad))
                 cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade) VALUES (%s, %s, %s, %s, %s)", (produt, desc, cate, valor_venda, quantidad))
                 mysql.connection.commit()
                 valor_percentual = ("select valor from estoque where produto = %s;", [produt])
@@ -177,7 +177,12 @@ def cad():
                         calc = (int(data))
                 print(calc)
 		cur.execute("update produtos  set quantidade = %s where produto = %s;", [calc, produt])
-                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
+#                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
+                cur.execute("select sum( %s+quantidade ) total from estoque where produto =%s;", [quantidad,produt])
+                data_calc = cur.fetchone()
+                for data in data_calc:
+                        calc = (int(data))
+		cur.execute("update estoque set quantidade = %s where produto = %s;", [calc, produt])
                 mysql.connection.commit()
 		return render_template('cadastroProdutos.html', value="ID do usuario ja cadastrado com este Vendedor ou ID nao existe")
 
