@@ -217,13 +217,13 @@ def consulting():
 def chart():
         chart = pygal.Bar()
 	cur = mysql.connection.cursor()
-	cur.execute("select produto, sum(valor) as teste from estoque group by produto")
+	cur.execute("select produto, quantidade from produtos;")
 	data = cur.fetchall()
 	for row in data:
 		chart.add(row[0], [row[1]])
 # 		print(data)
 		graph_produtos = chart.render_data_uri()
-        cur.execute("select produto, sum(valor) as teste from venda group by produto")
+        cur.execute("select produto, sum(quantidade) as teste from venda group by produto")
         chart = pygal.Bar()
         data3 = cur.fetchall()
         for row in data3:
