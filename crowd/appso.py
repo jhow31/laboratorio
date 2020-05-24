@@ -217,7 +217,7 @@ def consulting():
 def chart():
         chart = pygal.Bar()
 	cur = mysql.connection.cursor()
-	cur.execute("select produto, quantidade from estoque;")
+	cur.execute("select produto, sum(quantidade) from estoque group by produto;")
 	data = cur.fetchall()
 	for row in data:
 		chart.add(row[0], [row[1]])
@@ -233,9 +233,9 @@ def chart():
 	cur.execute("select sum(valor) from venda;")
 	valor_total = cur.fetchall()
 #	print(valor_total[0])
-	cur.execute("select produto, valor*quantidade from estoque;")
+	cur.execute("select produto, sum(valor*quantidade) as teste from estoque group by produto;")
 	valor_estoque = json.dumps(cur.fetchall())
-	cur.execute("select sum(valor*quantidade) from estoque;")
+	cur.execute("select  sum(valor*quantidade) as teste from estoque group by produto;")
 	valor_t_estoque = cur.fetchall()
 	print(json.loads(valor_estoque))
         return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, valor_total = valor_total[0], valor_estoque = valor_estoque, valor_t_estoque = valor_t_estoque[0])
