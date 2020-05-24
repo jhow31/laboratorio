@@ -19,6 +19,7 @@ create table venda(
    categoria VARCHAR(100) NOT NULL,
    produto VARCHAR(40) NOT NULL,
    user_id int(250),
+   date_now datetime NOT NULL, 
    PRIMARY KEY (id_venda)
 );
 
