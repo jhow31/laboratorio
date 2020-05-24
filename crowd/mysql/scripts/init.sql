@@ -7,7 +7,7 @@ create table estoque(
    quantidade INT(250),
    categoria VARCHAR(100) NOT NULL,
    produto VARCHAR(40) NOT NULL,
-   user_is INT(250),
+   user_id INT(250),
    PRIMARY KEY (id_estoque)
 );
 
@@ -18,7 +18,7 @@ create table venda(
    quantidade INT(250),
    categoria VARCHAR(100) NOT NULL,
    produto VARCHAR(40) NOT NULL,
-   id_user int(250),
+   user_id int(250),
    PRIMARY KEY (id_venda)
 );
 
