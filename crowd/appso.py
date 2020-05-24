@@ -238,7 +238,7 @@ def chart():
 	cur.execute("select sum(valor) from produtos;")
 	valor_t_estoque = cur.fetchall()
 	print(json.loads(valor_estoque))
-        return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, valor_total = valor_total[0], valor_estoque = valor_estoque+valor_t_estoque)
+        return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, valor_total = valor_total[0], valor_estoque = valor_estoque, valor_t_estoque = valor_t_estoque[0])
 #	return chart.render_response()
 
 @app.route("/simple_chart2")
