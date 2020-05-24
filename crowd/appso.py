@@ -30,6 +30,7 @@ import matplotlib
 import matplotlib.pyplot
 import matplotlib.pyplot as plt
 
+perc=4
 
 plt.switch_backend('agg')
 
@@ -151,7 +152,7 @@ def cad():
 	#id_data  = cur.fetchone();
 	cur.execute("SELECT * FROM produtos WHERE produto = %s;", [produt])
 	data = cur.fetchone()
-	valor_venda = valor/100*5+valor
+	valor_venda = valor/100*perc+valor
 	print(valor_venda)
 	if data is None:
 
