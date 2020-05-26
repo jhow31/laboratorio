@@ -152,7 +152,6 @@ def cad():
 	cur.execute("SELECT * FROM produtos WHERE produto = %s;", [produt])
 	data = cur.fetchone()
 	valor_venda = valor/100*perc+valor
-	print(valor_venda)
 	if data is None:
 
                 cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade) VALUES (%s, %s, %s, %s)", (produt, cate, valor, quantidad))
@@ -174,7 +173,6 @@ def cad():
                 data_calc = cur.fetchone()
                 for data in data_calc:
                         calc = (int(data))
-                print(calc)
 		cur.execute("update produtos  set quantidade = %s where produto = %s;", [calc, produt])
 #                cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
                 cur.execute("select sum( %s+quantidade ) total from estoque where produto =%s;", [quantidad,produt])
@@ -243,7 +241,6 @@ def chart():
                 chart.add(row[0], [row[1]])
 #                print(data3)
                 graph_vendas = chart.render_data_uri()
-	print(json.loads(valor_estoque))
         return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, valor_total = valor_total[0], valor_estoque = valor_estoque, valor_t_estoque = valor_t_estoque[0], lucro_total = teste)
 #	return chart.render_response()
 
@@ -252,7 +249,6 @@ def chart2():
 #	smtp.email_sender()
 	timestamp = datetime.datetime.now()
 	time2 = timestamp  - datetime.timedelta(days=30)
-	print(time2)
         chart = pygal.HorizontalBar()
         cur = mysql.connection.cursor()
         cur.execute("select produto, quantidade from produtos;")
