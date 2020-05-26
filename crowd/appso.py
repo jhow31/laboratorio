@@ -30,9 +30,7 @@ import matplotlib
 import matplotlib.pyplot
 import matplotlib.pyplot as plt
 
-perc=4
-
-plt.switch_backend('agg')
+perc=104
 
 
 app = Flask(__name__)
@@ -231,7 +229,7 @@ def chart():
         cur.execute("select  sum(valor*quantidade)from estoque;")
         valor_t_estoque = cur.fetchall()
 	lucro_total = valor_t_estoque[0]
-	teste = lucro_total[0]/100*perc+lucro_total[0]
+	teste = lucro_total[0]/100*perc
 	cur.execute("select produto, sum(quantidade) from estoque group by produto;")
 	data = cur.fetchall()
 	for row in data:
