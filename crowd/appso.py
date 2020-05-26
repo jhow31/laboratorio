@@ -230,8 +230,8 @@ def chart():
         valor_estoque = json.dumps(cur.fetchall())
         cur.execute("select  sum(valor*quantidade)from estoque;")
         valor_t_estoque = cur.fetchall()
-	lucro_total = valor_t_estoque
-	print(lucro_total)
+	lucro_total = valor_t_estoque[0]
+	print(lucro_total[0])/100
 	cur.execute("select produto, sum(quantidade) from estoque group by produto;")
 	data = cur.fetchall()
 	for row in data:
