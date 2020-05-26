@@ -226,7 +226,7 @@ def chart():
         cur.execute("select sum(valor) from venda;")
         valor_total = cur.fetchall()
 #       print(valor_total[0])
-        cur.execute("select produto, sum(valor*quantidade) as teste from estoque group by produto;")
+        cur.execute("select sum(valor*quantidade) from estoque;")
         valor_estoque = json.dumps(cur.fetchall())
         cur.execute("select  sum(valor*quantidade) as teste from estoque group by produto;")
         valor_t_estoque = cur.fetchall()
