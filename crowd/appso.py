@@ -37,14 +37,14 @@ app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-myclient = pymongo.MongoClient('mongodb://root:root@192.168.0.26:27017/')
+myclient = pymongo.MongoClient('mongodb://root:root@127.0.0.1:27017/')
 mydb = myclient["crowd"]
 mbestoque = mydb["estoque"]
 mbvenda = mydb["venda"]
 myvenda = mydb.mbvenda
 
 
-app.config['MYSQL_HOST'] = '192.168.0.26'
+app.config['MYSQL_HOST'] = '127.0.0.1'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = 'crowd'
