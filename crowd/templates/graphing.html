@@ -22,13 +22,13 @@
 </style>
 </head>
 <body>
-    <a href="http://192.168.0.26:5000/sell" class="btn btn-primary">Venda</a>
-    <a href="http://192.168.0.26:5000/cad_produtos" class="btn btn-primary">Cadastro Produtos</a>
+    <a href="/sell" class="btn btn-primary">Venda</a>
+    <a href="/cad_produtos" class="btn btn-primary">Cadastro Produtos</a>
 <div id="chart" class="column">
    <embed type="image/svg+xml" src= {{ chart|safe }} />
 <div class="title">Estoque:{{valor_estoque}}/ Valor Total: R${{valor_t_estoque[0]}}/ Lucro Total: R${{lucro_total}}</div>
 </div>
-    <a href="http://192.168.0.26:5000/cad_peoples" class="btn btn-primary">Cadastro de Pessoas</a>
+    <a href="/cad_peoples" class="btn btn-primary">Cadastro de Pessoas</a>
 <div id="chart3" class="column">
    <embed type="image/svg+xml" src= {{ chart3|safe }} />
    <div class="title">Valor Vendido Total: R${{valor_total[0]}}</div>
