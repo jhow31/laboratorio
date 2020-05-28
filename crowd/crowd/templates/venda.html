@@ -1,0 +1,20 @@
+<html>
+<body>
+<form method="POST" action="">
+    <center>
+    <a href="/cad_peoples" class="btn btn-primary">Cadastro Pessoas</a>
+    <a href="/wallet" class="btn btn-primary">Wallet</a>
+    <a href="/cad_produtos" class="btn btn-primary">Cadastro Produtos</a>
+    <H1>Venda </H1> <br>
+    Produto <input type = "text" name= "sell_prod" /> <br>
+    Quantidade <input type = "int" name = "sell_quant" /> <br>
+    <input type = "submit">
+    <h1>R${{venda}}<h1>
+    <h1>Produtos</h1>
+    {% for data in value %}
+      <p>{{data[0],data[1]}}</p>
+    {% endfor %}
+    </center>
+</form>
+</body>
+</html>

@@ -23,7 +23,7 @@ services:
       - ./mongodb/:/data/db:rw
     restart: always
   web:
-    build: .
+    build: ./crowd/
     ports:
       - "5000:5000" 
     restart: always 
