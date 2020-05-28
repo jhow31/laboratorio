@@ -10,3 +10,4 @@ pymongo
 pandas
 numpy
 matplotlib
+networkx
