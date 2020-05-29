@@ -1,0 +1,9 @@
+dn: dc=jonathan-laboratorio,dc=lab
+objectclass: dcObject
+objectclass: organization
+o: Laboratorio Openldap
+dc: lab
+
+dn: cn=Manager,dc=jonathan-laboratorio,dc=lab
+objectclass: organizationalRole
+cn: Manager

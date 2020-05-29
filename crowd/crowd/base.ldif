@@ -1,0 +1,9 @@
+dn: ou=Pessoas,dc=jonathan-laboratorio,dc=lab
+ou: Pessoas
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Grupos,dc=jonathan-laboratorio,dc=lab
+ou: Grupos
+objectClass: top
+objectClass: organizationalUnit
