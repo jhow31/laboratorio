@@ -1,0 +1,4 @@
+yum install epel-release wget net-tools python-pip nmap gcc g++ python3 mysql-devel python3-devel python-devel libpcap libpcap-devel libnet libnet-devel libnids -y;
+yum groupinstall "Development tools" -y ;
+yum update -y;
+echo "Todas as requisições foram instaladas"
