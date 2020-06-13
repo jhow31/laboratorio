@@ -1,0 +1,2 @@
+a:4:{s:4:"hash";s:0:"";s:5:"mtime";i:1591973003;s:6:"expire";i:1591980203;s:4:"tags";s:49:"a8e_STORE,a8e_CONFIG,a8e_COLLECTION_DATA,a8e_MAGE";}
+[{"group_id":"1","website_id":"1","name":"Main Website Store","root_category_id":"2","default_store_id":"1","code":"main_website_store"},{"group_id":"2","website_id":"1","name":"teste","root_category_id":"2","default_store_id":"0","code":"12345"}]

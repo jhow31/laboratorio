@@ -1,0 +1,1 @@
+/opt/bitnami/magento/htdocs/vendor/magento/module-integration/view/adminhtml/web/js/integration.js

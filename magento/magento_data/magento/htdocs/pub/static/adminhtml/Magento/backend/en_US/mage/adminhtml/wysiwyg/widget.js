@@ -1,0 +1,1 @@
+/opt/bitnami/magento/htdocs/lib/web/mage/adminhtml/wysiwyg/widget.js

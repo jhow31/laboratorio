@@ -28,6 +28,8 @@ import networkx as nx
 import matplotlib
 import matplotlib.pyplot
 import matplotlib.pyplot as plt
+from login import login_user
+
 
 perc=104
 
@@ -49,31 +51,10 @@ app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = 'crowd'
 mysql = MySQL(app)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
-	cur = mysql.connection.cursor()
-	value = ''
-	if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
-		email = request.form['email']
-		password_x = request.form['password']
-		password = base64.b64encode(password_x)
-		cur.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email, password,))
-		account = cur.fetchone()
-		print(account[6])
-	# Fetch one record and return result
-		if account:
-			# Create session data, we can access this data in other routes
-			session['loggedin'] = True
-			session['id_user'] = account[0]
-			session['email'] = account[6]
-			# Redirect to home page
-			return redirect(url_for('wallet'))
-		else:
-			# Account doesnt exist or username/password incorrect
-			value = 'Incorrect username/password!'
-	# Show the login form with message (if any)
-	return render_template('login.html', value=value)
+	login_user()
+
 @app.route('/sell')
 def firsts():
 	if 'loggedin' in session:

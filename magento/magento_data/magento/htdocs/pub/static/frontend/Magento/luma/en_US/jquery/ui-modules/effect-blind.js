@@ -1,0 +1,1 @@
+/opt/bitnami/magento/htdocs/lib/web/jquery/ui-modules/effect-blind.js

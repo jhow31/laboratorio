@@ -1,0 +1,1 @@
+/opt/bitnami/magento/htdocs/vendor/magento/module-cookie/view/frontend/web/js/require-cookie.js

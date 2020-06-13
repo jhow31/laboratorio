@@ -1,0 +1,1 @@
+/opt/bitnami/magento/htdocs/lib/web/mage/bootstrap.js
