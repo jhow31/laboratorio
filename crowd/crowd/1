@@ -28,6 +28,8 @@ import networkx as nx
 import matplotlib
 import matplotlib.pyplot
 import matplotlib.pyplot as plt
+from login import login_user
+
 
 perc=104
 
@@ -49,30 +51,10 @@ app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = 'crowd'
 mysql = MySQL(app)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def login():
-	cur = mysql.connection.cursor()
-	value = ''
-	if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
-		email = request.form['email']
-		password = request.form['password']
-		cur.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email, password,))
-		account = cur.fetchone()
-		print(account[6])
-	# Fetch one record and return result
-		if account:
-			# Create session data, we can access this data in other routes
-			session['loggedin'] = True
-			session['id_user'] = account[0]
-			session['email'] = account[6]
-			# Redirect to home page
-			return redirect(url_for('wallet'))
-		else:
-			# Account doesnt exist or username/password incorrect
-			value = 'Incorrect username/password!'
-	# Show the login form with message (if any)
-	return render_template('login.html', value=value)
+	return login_user()
+
 @app.route('/sell')
 def firsts():
 	if 'loggedin' in session:
@@ -89,6 +71,7 @@ def firsts():
 @app.route('/sell', methods=['POST','GET'])
 def sell():
 	if 'loggedin' in session:
+		user_id = session['user_id']
 		timestamp = datetime.datetime.now()
 		cur = mysql.connection.cursor()
 		cur.execute("select produto from produtos;")
@@ -117,7 +100,7 @@ def sell():
 				data_json={'Processo': "Saida Venda", 'Produto' : produt,'ID de Produto' : produt,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor_venda, 'TimeStamp' : timestamp}
 				mbvenda.insert_one(data_json)
 #		i22cur.execute("update venda set quantidade = quantidade+%s, valor = valor+%s where produto = %s;",(quantidad, valor_venda, produt))
-				cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor_venda, quantidad, timestamp))
+				cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now, user_id) VALUES (%s, %s, %s, %s, %s, %s)", (produt, cate, valor_venda, quantidad, timestamp, user_id))
 				mysql.connection.commit()
 			return render_template('venda.html', venda = valor_venda, value = produtos)
 		else:
@@ -173,6 +156,7 @@ def firstc():
 @app.route('/cad_produtos', methods=['POST','GET'])
 def cad():
 	if 'loggedin' in session:
+		user_id = session('id_user')
 		timestamp = datetime.datetime.now()
 	#print(timestamp)
 		produt = str(request.form['produto_name'])
@@ -185,7 +169,7 @@ def cad():
 		cur = mysql.connection.cursor()
 	#cur.execute("SELECT id FROM peoples WHERE id = %s ;", [id_people])
 	#id_data  = cur.fetchone();
-		cur.execute("SELECT * FROM produtos WHERE produto = %s;", [produt])
+		cur.execute("SELECT * FROM produtos WHERE produto = %s user_id = %s;", [produt, user_id])
 		data = cur.fetchone()
 		valor_venda = valor/100*perc+valor
 		if data is None:
@@ -252,26 +236,28 @@ def consulting():
 	return render_template('teste.html', value=data)
 
 @app.route("/wallet")
-def chart():
+def wallet():
 	if 'loggedin' in session:
+		print(session['id_user'])
+		user_id = session['id_user']
 		chart = pygal.Bar()
 		cur = mysql.connection.cursor()
 		cur.execute("select sum(valor) from venda;")
 		valor_total = cur.fetchall()
 #	   print(valor_total[0])
-		cur.execute("select produto, sum(valor*quantidade) from estoque group by produto;")
+		cur.execute("select produto, sum(valor*quantidade) from estoque where user_id = %s group by produto;", [user_id])
 		valor_estoque = json.dumps(cur.fetchall())
-		cur.execute("select  sum(valor*quantidade)from estoque;")
+		cur.execute("select  sum(valor*quantidade)from estoque where user_id = %s;", [user_id])
 		valor_t_estoque = cur.fetchall()
 		lucro_total = valor_t_estoque[0]
 		teste = lucro_total[0]/100*perc
-		cur.execute("select produto, sum(quantidade) from estoque group by produto;")
+		cur.execute("select produto, sum(quantidade) from estoque where user_id = %s group by produto;", [user_id])
 		data = cur.fetchall()
 		for row in data:
 			chart.add(row[0], [row[1]])
 # 		print(data)
 			graph_produtos = chart.render_data_uri()
-			cur.execute("select produto, sum(quantidade) as teste from venda group by produto")
+			cur.execute("select produto, sum(quantidade) as teste from venda where user_id = %s group by produto", [user_id])
 			chart = pygal.Bar()
 			data3 = cur.fetchall()
 			for row in data3:

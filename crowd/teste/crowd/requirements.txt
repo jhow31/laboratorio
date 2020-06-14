@@ -1,0 +1,14 @@
+wheel
+flask_table
+flask_pymongo
+Flask-PyMongo
+flask
+pygal
+flask_mysqldb
+simplejson
+pymongo
+pandas
+numpy
+matplotlib
+networkx
+docker-compose
