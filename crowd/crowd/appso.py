@@ -30,9 +30,13 @@ import matplotlib.pyplot
 import matplotlib.pyplot as plt
 from login import login_user
 import socketio
+from charts_ import wallet
+from multiprocessing import Process
+from cad_produtos import cad_json
+from flask import request
 
-perc=104
 
+m_cred=0,5
 
 
 app = Flask(__name__)
@@ -52,6 +56,7 @@ app.config['MYSQL_PASSWORD'] = 'root'
 app.config['MYSQL_DB'] = 'crowd'
 mysql = MySQL(app)
 
+
 #socketio = SocketIO(app)
 
 
@@ -62,15 +67,16 @@ def login():
 @app.route('/sell')
 def firsts():
 	if 'loggedin' in session:
+		id_user = session['id_user']
 		cur = mysql.connection.cursor()
-		cur.execute("select produto,quantidade from produtos;")
+		cur.execute("select produto,quantidade from produtos where id_user = %s;",[id_user])
 		produtos = cur.fetchall()
 		print(produtos)
 		for data in produtos:
 			print(data[0],data[1])
 		return render_template('venda.html', value=produtos)
 	else:
-		return render_template("login.html")
+		return redirect(url_for("login"))
 
 @app.route('/sell', methods=['POST','GET'])
 def sell():
@@ -78,30 +84,32 @@ def sell():
 		id_user = session['id_user']
 		timestamp = datetime.datetime.now()
 		cur = mysql.connection.cursor()
-		cur.execute("select produto from produtos;")
+		cur.execute("select produto from produtos where id_user = %s;",[id_user])
 		produtos = cur.fetchall()
 		produt = str(request.form['sell_prod'])
 		quantidad = int(request.form['sell_quant'])
 #	cur = mysql.connection.cursor()
-		cur.execute("select quantidade from produtos where produto = %s;", [produt])
+		cur.execute("select quantidade from produtos where produto = %s and id_user = %s;", [produt, id_user])
 		quantidade = cur.fetchone()
 		for data in quantidade:
 			calc_result = (int(data))
 		if quantidad <= calc_result:
-			cur.execute("select sum( quantidade-%s ) from produtos where produto =%s;", [quantidad,produt])
+			cur.execute("select sum( quantidade-%s ) from produtos where produto =%s and id_user = %s;", [quantidad,produt, id_user])
 			calc = cur.fetchone()
-			cur.execute("update produtos set quantidade = quantidade-%s where produto = %s;", [quantidad, produt])
-			cur.execute("update estoque set quantidade = quantidade-%s where produto = %s;", [quantidad, produt])
+			cur.execute("update produtos set quantidade = quantidade-%s where produto = %s and id_user = %s;", [quantidad, produt, id_user])
+			cur.execute("update estoque set quantidade = quantidade-%s where produto = %s and id_user = %s;", [quantidad, produt, id_user])
 			mysql.connection.commit()
-			cur.execute("select sum( valor*%s ) from produtos where produto =%s;", [quantidad,produt])
+			cur.execute("select sum( valor*%s ) from produtos where produto =%s and id_user = %s;", [quantidad,produt, id_user])
 			valor_venda = cur.fetchone()
+			cur.execute("UPDATE user set wallet = wallet+%s where id_user = %s", (valor_venda, id_user))
+			mysql.connection.commit()
 			for data in valor_venda:
 				valor_venda = (int(data))
-				cur.execute("select produto from produtos where produto=%s;", [produt])
+				cur.execute("select produto from produtos where produto=%s and id_user = %s;", [produt, id_user])
 				produt = cur.fetchone()		
-				cur.execute("select categoria from produtos where produto=%s;", [produt])
+				cur.execute("select categoria from produtos where produto=%s and id_user = %s;", [produt, id_user])
 				cate = cur.fetchone()
-				data_json={'Processo': "Saida Venda", 'Produto' : produt,'ID de Produto' : produt,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor_venda, 'TimeStamp' : timestamp}
+				data_json={'Processo': "Saida Venda", 'Produto' : produt,'ID de Produto' : produt,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': valor_venda, 'ID_USER' : id_user, 'TimeStamp' : timestamp}
 				mbvenda.insert_one(data_json)
 #		i22cur.execute("update venda set quantidade = quantidade+%s, valor = valor+%s where produto = %s;",(quantidad, valor_venda, produt))
 				cur.execute("INSERT INTO venda (produto, categoria, valor, quantidade, date_now, id_user) VALUES (%s, %s, %s, %s, %s, %s)", (produt, cate, valor_venda, quantidad, timestamp, id_user))
@@ -111,13 +119,14 @@ def sell():
 #		quant_estoque = "Estoque Baixo, estoque esta em "quantidade
 			return render_template('vendas.html', venda = "Estoque a baixo", value=produtos)
 	else:
-		return render_template("login.html")	 
+		return redirect(url_for("login"))
+
 @app.route('/cad_peoples')
 def firstp():
 	if 'loggedin' in session:
 		return render_template('cadastroPessoas.html')
 	else:
-			return render_template("login.html")
+			return redirect(url_for("login"))
 @app.route('/cad_peoples', methods=['POST','GET'])
 def cad_people():
 	if 'loggedin' in session:
@@ -146,7 +155,7 @@ def cad_people():
 		else:
 			return render_template('cadastroPessoas.html', value="Duplicated User")
 	else:
-			return render_template("login.html")
+			return redirect(url_for("login"))
 #Preciso de uma tela com os IDs do Vendedores pra Empresa que quer consultar e cadastrar para ele
 #Associacoes empresas acessam esta tela e ela e cadastro de Usuario tbm
 
@@ -155,7 +164,7 @@ def firstc():
 	if 'loggedin' in session:
 		return render_template('cadastroProdutos.html')
 	else:
-		return render_template("login.html")
+		return redirect(url_for("login"))
 
 @app.route('/cad_produtos', methods=['POST','GET'])
 def cad():
@@ -172,6 +181,9 @@ def cad():
 		id_people  = float(request.form['produto_id_vendor'])
 #	contact = float(request.form['produto_cont'])
 		cur = mysql.connection.cursor()
+		cur.execute("SELECT lucro_perc FROM user WHERE id_user = %s;", [id_user])
+		perc = cur.fetchone()
+		perc = perc[0]
 	#cur.execute("SELECT id FROM peoples WHERE id = %s ;", [id_people])
 	#id_data  = cur.fetchone();
 		cur.execute("SELECT * FROM produtos WHERE produto = %s AND id_user = %s;", [produt, id_user])
@@ -181,135 +193,38 @@ def cad():
 			cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, id_user) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad,id_user))
 			cur.execute("INSERT INTO produtos (produto, descricao, categoria, valor, quantidade, id_user) VALUES (%s, %s, %s, %s, %s, %s)", (produt, desc, cate, valor_venda, quantidad,id_user))
 			mysql.connection.commit()
-			valor_percentual = ("select valor from estoque where produto = %s;", [produt])
+			valor_percentual = ("select valor from estoque where produto = %s and id_user = %s;", [produt, id_user])
 			mysql.connection.commit()
-			cur.execute("select id_produto from produtos where produto=%s;", [produt])
+			cur.execute("select id_produto from produtos where produto=%s and id_user = %s;", [produt, id_user])
 			produt_id = cur.fetchone()
-			data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': str(valor), 'TimeStamp' : timestamp}
+			data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': str(valor), 'ID_USER' : id_user, 'TimeStamp' : timestamp}
 			mbestoque.insert_one(data_json)
 			return render_template('cadastroProdutos.html', value="Cadastrado")
 		else:
 			cur.execute("select id_produto from produtos where produto=%s;", [produt])
 			produt_id = cur.fetchone()
-			data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': str(valor), 'ID_USER': id_user, 'TimeStamp' : timestamp}
+			data_json={'Processo': "Entrada estoque", 'Produto' : produt,'ID de Produto' : produt_id,'Categoria' : cate,'Quantidade' : quantidad, 'Valor': str(valor), 'ID_USER' : id_user, 'TimeStamp' : timestamp}
 			mbestoque.insert_one(data_json)
-			cur.execute("select sum( %s+quantidade ) total from produtos where produto =%s;", [quantidad,produt])
+			cur.execute("select sum( %s+quantidade ) total from produtos where produto =%s and id_user = %s;", [quantidad,produt, id_user])
 			data_calc = cur.fetchone()
 			for data in data_calc:
 				calc = (int(data))
-			cur.execute("update produtos  set quantidade = %s where produto = %s;", [calc, produt])
+			cur.execute("update produtos  set quantidade = %s where produto = %s and id_user = %s;", [calc, produt, id_user])
 #		cur.execute("INSERT INTO estoque (produto, categoria, valor, quantidade, date_now) VALUES (%s, %s, %s, %s, %s)", (produt, cate, valor, quantidad, timestamp))
-			cur.execute("select sum( %s+quantidade ) total from estoque where produto =%s;", [quantidad,produt])
+			cur.execute("select sum( %s+quantidade ) total from estoque where produto =%s and id_user = %s;", [quantidad,produt, id_user])
 			data_calc = cur.fetchone()
 			for data in data_calc:
 				calc = (int(data))
-			cur.execute("update estoque set quantidade = %s where produto = %s;", [calc, produt])
+			cur.execute("update estoque set quantidade = %s where produto = %s and id_user = %s;", [calc, produt, id_user])
 			mysql.connection.commit()
 			return render_template('cadastroProdutos.html', value="ID do usuario ja cadastrado com este Vendedor ou ID nao existe")
 	else:
-		return render_template("login.html")
-@app.route('/dashboard')
-def firstd():
-	cur = mysql.connection.cursor()
-	cur.execute("SELECT produto,quantidade FROM estoque")
-	data1 = cur.fetchall()
-	return render_template('dashboard.html', value=data1)
-
-@app.route('/dashboard', methods=['POST','GET'])
-def dashboard():
-	cur = mysql.connection.cursor()
-	produt = request.form['sell_prod']
-	cur.execute("SELECT produto,quantidade,valor FROM estoque")
-	data1 = str(cur.fetchall())
-	cur.execute("select sum( valor*quantidade ) total from estoque where produto =%s;", [produt])
-	data = int(cur.fetchone())
-	return render_template('dashboard.html', value=data, value2=data1)
-	 
-
-@app.route('/consult')
-def consult():
-	return render_template("teste.html")
-
-@app.route('/consult', methods=['GET','POST'])
-def consulting():
-#	firstName = request.form['fname']
-#	lastName = request.form['lname']
-#	prof = request.form['prof']
-	cur = mysql.connection.cursor()
-	cur.execute("SELECT quantidade produto FROM produto;")
-	data = cur.fetchone()
-	return render_template('teste.html', value=data)
+		return redirect(url_for("login"))
 
 @app.route("/wallet")
-def wallet():
-	if 'loggedin' in session:
-		print(session['id_user'])
-		id_user = session['id_user']
-		chart = pygal.Bar()
-		cur = mysql.connection.cursor()
-		cur.execute("select sum(valor) from venda;")
-		valor_total = cur.fetchall()
-#	   print(valor_total[0])
-		cur.execute("select produto, sum(valor*quantidade) from estoque where id_user = %s group by produto;", [id_user])
-		valor_estoque = json.dumps(cur.fetchall())
-		cur.execute("select  sum(valor*quantidade)from estoque where id_user = %s;", [id_user])
-		valor_t_estoque = cur.fetchall()
-		lucro_total = valor_t_estoque[0]
-		teste = lucro_total[0]/100*perc
-		cur.execute("select produto, sum(quantidade) from estoque where id_user = %s group by produto;", [id_user])
-		data = cur.fetchall()
-		for row in data:
-			chart.add(row[0], [row[1]])
-# 		print(data)
-			graph_produtos = chart.render_data_uri()
-			cur.execute("select produto, sum(quantidade) as teste from venda where id_user = %s group by produto", [id_user])
-			chart = pygal.Bar()
-			data3 = cur.fetchall()
-			for row in data3:
-					chart.add(row[0], [row[1]])
-#				print(data3)
-					graph_vendas = chart.render_data_uri()
-			return render_template("graphing.html", chart = graph_produtos, chart3 = graph_vendas, valor_total = valor_total[0], valor_estoque = valor_estoque, valor_t_estoque = valor_t_estoque[0], lucro_total = teste)
-	else:
-		return render_template("login.html")
+def wallet_():
+	return wallet()
 #	return chart.render_response()
-
-@app.route("/simple_chart2")
-def chart2():
-#	smtp.email_sender()
-	timestamp = datetime.datetime.now()
-	time2 = timestamp  - datetime.timedelta(days=30)
-	chart = pygal.HorizontalBar()
-	cur = mysql.connection.cursor()
-	cur.execute("select produto, quantidade from produtos;")
-	data2 = cur.fetchall()
-	documents = list(mbvenda.find())
-#	print(documents.append("Produtos"))
-	x = []
-	for x in documents:
-		if x["TimeStamp"] > time2:
-		#	print(x["Produto"],x["Categoria"],x["Valor"],x["Quantidade"])
-			chart.add(x["Produto"], x["Quantidade"])
-		return chart.render_response()
-
-@app.route("/simple_chart3")
-def chart3():
-#	  smtp.email_sender()
-	timestamp = datetime.datetime.now()
-	time2 = timestamp  - datetime.timedelta(days=30)
-	chart = pygal.HorizontalBar()
-	cur = mysql.connection.cursor()
-	cur.execute("select produto, quantidade from produtos;")
-	data2 = cur.fetchall()
-	documents = list(mbvenda.find())
-	x = []
-#	print(documents["Quantidade"])
-	for x in documents:
-		if x["TimeStamp"] > time2:
-			print(x["Produto"],x["Categoria"],x["Valor"],x["Quantidade"])
-#			chart.add(x["Produto"], x["Quantidade"])
-	return chart.render_response()
-
 
 @app.route("/simple_chart4")
 def draw():
@@ -327,6 +242,23 @@ def draw():
 		return(Exception)
 
 #	return render_template('plot.html', url='static/images/plot.png')
+#def teste_pool():
+#	import time
+#	with app.app_context():
+#		while True: 
+#			cur = mysql.connect.cursor()
+#			cur.execute("select id_user from user")
+#			data = cur.fetchall()
+#			for row in data:
+#				id_user = int(row[0])
+#				cur.execute("select sum(valor) from venda where id_user = %s;", [id_user])
+#				valor_total = cur.fetchone()[0]
+#				cur.execute("update user set caixa = %s where id_user = %s;", [valor_total, id_user])
+#				mysql.connect.commit()
+
+@app.route('/teste_json', methods=['POST','GET'])
+def teste_jax():
+	return cad_json(perc)
 
 @app.route('/teste')
 def teste():
@@ -338,6 +270,6 @@ def teste():
 	return json.dumps(response)
 
 if __name__ == '__main__':
+#	backProc = Process(target=teste_pool)
+#	backProc.start()
 	app.run(host='0.0.0.0', debug=True)
-
-

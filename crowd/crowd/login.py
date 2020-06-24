@@ -66,7 +66,7 @@ def login_user():
                         session['id_user'] = account[0]
                         session['email'] = account[6]
                         # Redirect to home page
-                        return redirect(url_for('wallet'))
+                        return redirect(url_for("wallet_"))
                 else:
                         # Account doesnt exist or username/password incorrect
                         value = 'Incorrect username/password!'
